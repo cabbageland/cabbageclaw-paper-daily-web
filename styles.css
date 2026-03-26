@@ -43,11 +43,15 @@ h1 { margin: 0; font-size: clamp(32px, 5vw, 52px); line-height: 1; }
 .stat .label { color: var(--muted); font-size: 13px; }
 .stat .value { font-size: 28px; font-weight: 800; margin-top: 8px; }
 .tabs { display:flex; gap:8px; padding:8px; margin: 18px 0 12px; overflow:auto; }
-.tab { appearance:none; border:none; cursor:pointer; padding:12px 16px; border-radius:14px; background: transparent; color: var(--muted); font-weight:700; }
+.tab { appearance:none; border:none; cursor:pointer; padding:12px 16px; border-radius:14px; background: transparent; color: var(--muted); font-weight:700; font-size: 15px; }
 .tab.active { background: rgba(255,255,255,.08); color: var(--text); }
 .controls { display:flex; gap:12px; padding:12px; margin-bottom: 16px; }
 .controls input, .controls select {
-  width:100%; padding:14px 16px; border-radius: 14px; border:1px solid var(--border); background: rgba(255,255,255,.05); color: var(--text);
+  width:100%; padding:14px 16px; border-radius: 14px; border:1px solid var(--border); background: rgba(255,255,255,.05); color: var(--text); font-size: 15px;
+}
+.controls input::placeholder {
+  color: var(--muted);
+  font-size: 15px;
 }
 .controls select { max-width: 220px; }
 .view { display:none; }
