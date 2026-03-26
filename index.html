@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cabbageclaw paper daily</title>
+  <meta name="description" content="GitHub Pages dashboard for cabbageclaw paper daily" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">cabbageland / github pages demo</p>
+        <h1>cabbageclaw paper daily</h1>
+        <p class="subhead">A mobile-friendly dashboard for daily digests, paper notes, and recent research judgment.</p>
+      </div>
+      <div class="topbar-actions">
+        <a class="button ghost" href="https://github.com/cabbageland/cabbageclaw_paper_daily" target="_blank" rel="noreferrer">source repo</a>
+      </div>
+    </header>
+
+    <section class="hero" id="hero"></section>
+
+    <nav class="tabs">
+      <button class="tab active" data-view="overview">Overview</button>
+      <button class="tab" data-view="digests">Digests</button>
+      <button class="tab" data-view="notes">Paper notes</button>
+      <button class="tab" data-view="related">Related work</button>
+    </nav>
+
+    <section class="controls">
+      <input id="searchInput" type="search" placeholder="Search titles, themes, verdicts, or notes..." />
+      <select id="verdictFilter">
+        <option value="">All verdicts</option>
+        <option>Must read</option>
+        <option>Highly relevant</option>
+        <option>Useful</option>
+        <option>Skimmable</option>
+        <option>Ignore</option>
+      </select>
+    </section>
+
+    <main>
+      <section class="view active" id="view-overview">
+        <div class="stats" id="stats"></div>
+        <div class="grid two">
+          <article class="panel">
+            <div class="panel-head">
+              <h2>Latest digest</h2>
+              <span id="latestDigestDate" class="muted"></span>
+            </div>
+            <div id="latestDigest"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head">
+              <h2>Recent top picks</h2>
+            </div>
+            <div id="recentPicks" class="stack"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-digests">
+        <div id="digestList" class="card-list"></div>
+      </section>
+
+      <section class="view" id="view-notes">
+        <div id="notesList" class="card-list"></div>
+      </section>
+
+      <section class="view" id="view-related">
+        <div id="relatedList" class="card-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <template id="digestCardTemplate">
+    <article class="card digest-card">
+      <div class="card-meta-row">
+        <span class="chip date"></span>
+        <a class="chip link" target="_blank" rel="noreferrer">open markdown</a>
+      </div>
+      <h3></h3>
+      <p class="theme"></p>
+      <p class="overview"></p>
+      <details>
+        <summary>Takeaway</summary>
+        <p class="takeaway"></p>
+      </details>
+    </article>
+  </template>
+
+  <template id="noteCardTemplate">
+    <article class="card note-card">
+      <div class="card-meta-row">
+        <span class="chip verdict"></span>
+        <span class="chip venue"></span>
+      </div>
+      <h3></h3>
+      <p class="why"></p>
+      <p class="overview"></p>
+      <div class="link-row">
+        <a class="paper-link" target="_blank" rel="noreferrer">paper</a>
+        <a class="md-link" target="_blank" rel="noreferrer">note markdown</a>
+      </div>
+    </article>
+  </template>
+
+  <template id="relatedCardTemplate">
+    <article class="card related-card">
+      <h3></h3>
+      <p class="overview"></p>
+      <a class="md-link" target="_blank" rel="noreferrer">open markdown</a>
+    </article>
+  </template>
+
+  <script src="./app.js" type="module"></script>
+</body>
+</html>
