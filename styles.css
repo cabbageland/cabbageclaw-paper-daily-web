@@ -270,11 +270,122 @@ details summary { cursor:pointer; color: var(--accent-2); font-size: 17px; font-
   .hero .big { font-size: 17px; }
   .hero-picks { padding: 16px; }
   .hero-picks-list li { font-size: 18px; }
-  .hero-art-wrap { min-height: 180px; }
-  .hero-art { width: min(70vw, 250px); }
   .panel { padding: 20px; }
   .panel-head h2 { font-size: 22px; }
   #latestDigest h3 { font-size: 28px; }
   #latestDigest p, .card p { font-size: 17px; }
   .controls select { max-width:none; }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 14px 10px 40px;
+  }
+  .page-stamp {
+    top: -6px;
+    right: -18px;
+    width: min(54vw, 200px);
+    opacity: 0.34;
+  }
+  .topbar,
+  .hero,
+  .panel,
+  .card,
+  .stat,
+  .controls,
+  .tabs {
+    border-radius: 18px;
+  }
+  .topbar {
+    padding: 16px 14px;
+    gap: 14px;
+  }
+  .topbar-actions,
+  .topbar-actions .button,
+  .source-pill {
+    width: 100%;
+  }
+  .eyebrow {
+    max-width: 100%;
+    font-size: 10px;
+    line-height: 1.25;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  h1 {
+    font-size: clamp(24px, 8.2vw, 34px);
+  }
+  .title-gradient {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .hero {
+    padding: 16px 14px;
+  }
+  .hero h2 {
+    font-size: clamp(28px, 8vw, 38px);
+    line-height: 1;
+  }
+  .hero .big,
+  .hero-picks-list li,
+  #latestDigest p,
+  .card p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .hero-picks-list {
+    padding-left: 20px;
+    gap: 8px;
+  }
+  .hero-scroll {
+    font-size: 15px;
+  }
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  .tabs {
+    gap: 6px;
+    padding: 6px;
+  }
+  .tab {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 11px 12px;
+    font-size: 14px;
+  }
+  .controls {
+    padding: 10px;
+    gap: 10px;
+  }
+  .controls input,
+  .controls select {
+    padding: 13px 14px;
+    font-size: 16px;
+  }
+  .card-list {
+    grid-template-columns: 1fr;
+  }
+  .card,
+  .panel,
+  .mini-pick {
+    padding: 16px;
+  }
+  .card h3,
+  #latestDigest h3 {
+    font-size: 24px;
+    line-height: 1.12;
+  }
+  .panel-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .link-row {
+    gap: 10px;
+  }
+  .link-row a {
+    width: 100%;
+    justify-content: center;
+  }
 }
