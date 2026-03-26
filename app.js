@@ -1,4 +1,25 @@
-const SOURCE_BASE = 'https://raw.githubusercontent.com/cabbageland/cabbageclaw_paper_daily/main/';
+const SOURCE_BASE = 'https://github.com/cabbageland/cabbageclaw_paper_daily/blob/main/';
+
+function githubMarkdownUrl(path='') {
+  return `${SOURCE_BASE}${path}`;
+}
+
+function makeClickableCard(node, href) {
+  node.classList.add('clickable-card');
+  node.tabIndex = 0;
+  node.setAttribute('role', 'link');
+  node.addEventListener('click', (e) => {
+    if (e.target.closest('a, button, summary')) return;
+    window.open(href, '_blank', 'noreferrer');
+  });
+  node.addEventListener('keydown', (e) => {
+    if (e.target !== node) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.open(href, '_blank', 'noreferrer');
+    }
+  });
+}
 
 const state = {
   content: null,
@@ -46,18 +67,20 @@ function formatDate(dateStr) {
 
 function renderHero() {
   const latest = state.content.digests[0];
+  const picks = state.content.notes.slice(0, 4);
   els.hero.innerHTML = `
-    <div class="hero-grid">
-      <div>
-        <div class="kicker">Latest digest</div>
-        <h2>${escapeHtml(latest.title)}</h2>
+    <div class="hero-grid headline-hero solo-hero">
+      <div class="hero-main">
+        <div class="kicker">Today’s paper recommendations</div>
+        <h2><a class="hero-title-link" href="${githubMarkdownUrl(latest.path)}" target="_blank" rel="noreferrer">${escapeHtml(latest.title)}</a></h2>
         <p class="big">${escapeHtml(latest.theme)}</p>
-        <p>${escapeHtml(short(latest.takeaway, 360))}</p>
-      </div>
-      <div>
-        <div class="kicker">What this demo is</div>
-        <p>This is a static GitHub Pages dashboard. No backend. No auth drama. Just a clean mobile-friendly layer over the existing paper-daily repo.</p>
-        <p class="muted">Meaning: this can be pinned to a phone home screen, expanded later, or used as the basis for a broader paper + neuro dashboard.</p>
+        <div class="hero-picks">
+          <div class="hero-picks-label">Recommended papers today</div>
+          <ol class="hero-picks-list">
+            ${picks.map(note => `<li>${escapeHtml(note.title)}</li>`).join('')}
+          </ol>
+        </div>
+        <a class="hero-scroll" href="#view-overview">↓ Scroll down for details</a>
       </div>
     </div>
   `;
@@ -81,26 +104,28 @@ function renderOverview() {
   const latest = state.content.digests[0];
   els.latestDigestDate.textContent = formatDate(latest.date);
   els.latestDigest.innerHTML = `
-    <h3>${escapeHtml(latest.title)}</h3>
+    <h3><a class="card-title-link" href="${githubMarkdownUrl(latest.path)}" target="_blank" rel="noreferrer">${escapeHtml(latest.title)}</a></h3>
     <p class="theme">${escapeHtml(latest.theme)}</p>
     <p>${escapeHtml(latest.overview)}</p>
     <details open>
       <summary>One-paragraph takeaway</summary>
       <p>${escapeHtml(latest.takeaway)}</p>
     </details>
-    <p><a class="button ghost" href="${SOURCE_BASE + latest.path}" target="_blank" rel="noreferrer">open digest markdown</a></p>
+    <p><a class="button ghost" href="${githubMarkdownUrl(latest.path)}" target="_blank" rel="noreferrer">open digest markdown</a></p>
   `;
+  makeClickableCard(els.latestDigest, githubMarkdownUrl(latest.path));
   const recent = state.content.notes.slice(0, 5);
   els.recentPicks.innerHTML = recent.map(note => `
-    <article class="mini-pick">
+    <article class="mini-pick" data-href="${githubMarkdownUrl(note.path)}">
       <div class="card-meta-row">
-        <span class="chip verdict">${escapeHtml(note.verdict || 'Unknown')}</span>
-        <span class="chip">${escapeHtml(note.venue || 'Unknown venue')}</span>
+        <a class="chip verdict" href="${githubMarkdownUrl(note.path)}" target="_blank" rel="noreferrer">${escapeHtml(note.verdict || 'Unknown')}</a>
+        <a class="chip" href="${githubMarkdownUrl(note.path)}" target="_blank" rel="noreferrer">${escapeHtml(note.venue || 'Unknown venue')}</a>
       </div>
-      <h4>${escapeHtml(note.title)}</h4>
+      <h4><a class="card-title-link" href="${githubMarkdownUrl(note.path)}" target="_blank" rel="noreferrer">${escapeHtml(note.title)}</a></h4>
       <p>${escapeHtml(short(note.whySelected || note.verdictText || note.overview, 180))}</p>
     </article>
   `).join('');
+  els.recentPicks.querySelectorAll('.mini-pick').forEach(node => makeClickableCard(node, node.dataset.href));
 }
 
 function renderDigests() {
@@ -108,13 +133,18 @@ function renderDigests() {
   els.digestList.innerHTML = '';
   for (const item of items) {
     const node = templates.digest.content.firstElementChild.cloneNode(true);
-    node.querySelector('.date').textContent = formatDate(item.date);
+    const digestHref = githubMarkdownUrl(item.path);
+    const date = node.querySelector('.date');
+    date.textContent = formatDate(item.date);
+    date.href = digestHref;
     const link = node.querySelector('.link');
-    link.href = SOURCE_BASE + item.path;
-    node.querySelector('h3').textContent = item.title;
+    link.href = digestHref;
+    const title = node.querySelector('h3');
+    title.innerHTML = `<a class="card-title-link" href="${digestHref}" target="_blank" rel="noreferrer">${escapeHtml(item.title)}</a>`;
     node.querySelector('.theme').textContent = item.theme;
     node.querySelector('.overview').textContent = short(item.overview, 420);
     node.querySelector('.takeaway').textContent = item.takeaway;
+    makeClickableCard(node, digestHref);
     els.digestList.appendChild(node);
   }
 }
@@ -122,20 +152,28 @@ function renderDigests() {
 function renderNotes() {
   const items = state.content.notes.filter(n => {
     const verdictOk = !state.verdict || (n.verdict || '').toLowerCase() === state.verdict.toLowerCase();
-    return verdictOk && matchQuery([n.title, n.verdict, n.venue, n.whySelected, n.overview, n.whyItMatters]);
+    return verdictOk && matchQuery([n.title, n.verdict, n.venue, n.whySelected, n.overview, n.whyItMatters, n.finalDecision]);
   });
   els.notesList.innerHTML = '';
   for (const item of items) {
     const node = templates.note.content.firstElementChild.cloneNode(true);
-    node.querySelector('.verdict').textContent = item.verdict || 'Unknown';
-    node.querySelector('.venue').textContent = item.venue || 'Unknown venue';
-    node.querySelector('h3').textContent = item.title;
+    const noteHref = githubMarkdownUrl(item.path);
+    const verdict = node.querySelector('.verdict');
+    verdict.textContent = item.verdict || 'Unknown';
+    verdict.href = noteHref;
+    const venue = node.querySelector('.venue');
+    venue.textContent = item.venue || 'Unknown venue';
+    venue.href = noteHref;
+    const title = node.querySelector('h3');
+    title.innerHTML = `<a class="card-title-link" href="${noteHref}" target="_blank" rel="noreferrer">${escapeHtml(item.title)}</a>`;
     node.querySelector('.why').textContent = short(item.whySelected || item.verdictText, 220);
     node.querySelector('.overview').textContent = short(item.overview, 420);
+    node.querySelector('.why-matters').textContent = item.whyItMatters ? short(item.whyItMatters, 220) : '';
     const paperLink = node.querySelector('.paper-link');
-    paperLink.href = item.link || SOURCE_BASE + item.path;
+    paperLink.href = item.link || noteHref;
     const mdLink = node.querySelector('.md-link');
-    mdLink.href = SOURCE_BASE + item.path;
+    mdLink.href = noteHref;
+    makeClickableCard(node, noteHref);
     els.notesList.appendChild(node);
   }
 }
@@ -145,9 +183,12 @@ function renderRelated() {
   els.relatedList.innerHTML = '';
   for (const item of items) {
     const node = templates.related.content.firstElementChild.cloneNode(true);
-    node.querySelector('h3').textContent = item.title;
+    const relatedHref = githubMarkdownUrl(item.path);
+    const title = node.querySelector('h3');
+    title.innerHTML = `<a class="card-title-link" href="${relatedHref}" target="_blank" rel="noreferrer">${escapeHtml(item.title)}</a>`;
     node.querySelector('.overview').textContent = short(item.overview, 360);
-    node.querySelector('.md-link').href = SOURCE_BASE + item.path;
+    node.querySelector('.md-link').href = relatedHref;
+    makeClickableCard(node, relatedHref);
     els.relatedList.appendChild(node);
   }
 }
@@ -161,20 +202,38 @@ function renderAll() {
   renderRelated();
 }
 
+function setActiveView(view) {
+  state.view = view;
+  document.querySelectorAll('.tab').forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${view}`));
+}
+
 function setupTabs() {
   document.querySelectorAll('.tab').forEach(btn => {
     btn.addEventListener('click', () => {
-      state.view = btn.dataset.view;
-      document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === btn));
-      document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${state.view}`));
+      setActiveView(btn.dataset.view);
     });
   });
 }
 
 async function init() {
   setupTabs();
-  els.searchInput.addEventListener('input', (e) => { state.query = e.target.value; renderDigests(); renderNotes(); renderRelated(); });
-  els.verdictFilter.addEventListener('change', (e) => { state.verdict = e.target.value; renderNotes(); });
+  els.searchInput.addEventListener('input', (e) => {
+    state.query = e.target.value;
+    if (state.query.trim()) {
+      setActiveView('notes');
+    }
+    renderDigests();
+    renderNotes();
+    renderRelated();
+  });
+  els.verdictFilter.addEventListener('change', (e) => {
+    state.verdict = e.target.value;
+    if (state.verdict) {
+      setActiveView('notes');
+    }
+    renderNotes();
+  });
   const res = await fetch('./data/content.json');
   state.content = await res.json();
   renderAll();
