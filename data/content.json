@@ -1,7 +1,22 @@
 {
-  "generatedAt": "2026-03-27T07:26:26.143325+00:00",
+  "generatedAt": "2026-03-27T15:04:25.864991+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
+    {
+      "slug": "2026-03-27",
+      "date": "2026-03-27",
+      "title": "Daily Digest — 2026-03-27",
+      "theme": "Today’s useful papers are all really about one question: where does the structure live? In the strongest case, it lives in the training signal and latent state, not in slow theatrical inference. In the weaker-but-still-useful cases, it lives in geometric constraints or in repurposed generative features. The common lesson is harsh: a lot of current “world model” and “3D-aware” work is still selling outputs, while the interesting papers are changing the representation or constraint object itself.",
+      "overview": "Today’s strongest paper is Fast-WAM: Do World Action Models Need Test-time Future Imagination? It asks a real question instead of decorating a familiar pipeline: if world-action models help, is that because they explicitly imagine futures at inference time, or because video co-training shapes better internal state during training? Their answer is the useful one. Keep the world-model objective, drop the expensive test-time future generation, and most of the benefit remains. That matters because it cuts through a lot of unnecessary generative theater in embodied control.\n\nThe second worthwhile paper is VEGA-3D: Generation Models Know Space. This is more adjacent than direct, but it is still worth preserving because it treats video generators as sources of geometric priors rather than as output machines. The mechanism is simple enough to matter: extract intermediate spatiotemporal features from a frozen video diffusion model, fuse them with semantic vision features, and use that to improve spatial reasoning and scene understanding. The paper is strongest as a representation argument, not as proof that video generators are full world models.\n\nThe third paper worth logging is Interact3D: Compositional 3D Generation of Interactive Objects. It is not conceptually as deep as the first two, but it does something many “compositional 3D” papers avoid: it imposes explicit geometric alignment and collision penalties instead of hoping composition emerges from raw generation. The agentic-refinement layer is less interesting than the registration-plus-SDF core.",
+      "takeaway": "The real split today is between papers that use generation as computation and papers that use generation as costume. Fast-WAM is the clearest win because it tests whether imagined futures are doing real work and finds that much of the value may already be baked into the representation learned during training. VEGA-3D is useful because it mines geometric priors from a frozen video generator instead of pretending language-only reasoning will discover spatial structure by moral effort. Interact3D is useful in a more old-fashioned way: it replaces compositional hand-waving with explicit alignment and collision constraints. The shared lesson is simple: if a paper claims structure, check whether it changes the latent state, the constraint object, or the inference contract. If not, it is probably mostly branding.",
+      "mostRelevantPaper": "Fast-WAM is the best fit. The important claim is not “we are faster.” The important claim is that explicit future imagination at inference time may be mostly optional once video modeling has already shaped the latent representation during training. If that survives broader scrutiny, it is a strong argument for separating representation learning from decision-time rollout cost.",
+      "rankedTitles": [
+        "Fast-WAM: Do World Action Models Need Test-time Future Imagination?",
+        "VEGA-3D: Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding",
+        "Interact3D: Compositional 3D Generation of Interactive Objects"
+      ],
+      "path": "daily_papers/2026-03-27.md"
+    },
     {
       "slug": "2026-03-26",
       "date": "2026-03-26",
@@ -110,6 +125,51 @@
     }
   ],
   "notes": [
+    {
+      "slug": "vega_3d_video_generator_priors_scene_understanding",
+      "title": "VEGA-3D: Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding",
+      "dateSurfaced": "2026-03-27",
+      "year": "2026",
+      "link": "https://arxiv.org/abs/2603.19235",
+      "venue": "arXiv",
+      "whySelected": "It repurposes frozen video-generation features as geometric priors for spatial reasoning instead of treating generation only as an output modality.",
+      "verdict": "* Useful",
+      "verdictText": "The paper is conceptually adjacent rather than central, but the mechanism is clean enough to keep. The good part is that it treats spatial reasoning as a representation problem and mines geometry-sensitive features from a pretrained video generator. The weak part is the familiar inflation risk: “latent world simulator” is stronger language than the actual evidence warrants.",
+      "overview": "VEGA-3D argues that large video generators implicitly learn useful 3D and physical structure because coherent video synthesis requires viewpoint consistency, object persistence, and plausible motion. Instead of generating videos at inference time, the method extracts intermediate spatiotemporal features from a frozen video diffusion model and fuses them with standard semantic visual features from a discriminative encoder. A multimodal LLM then consumes the fused representation for tasks like visual grounding, dense captioning, spatial reasoning, and embodied manipulation. The main contribution is not proving that video generators are full world models, but showing they can supply transferable geometric priors when explicit 3D supervision is expensive or scarce.",
+      "whyItMatters": "Because it is a credible example of stealing useful structure from generators without swallowing the whole generator-as-agent story. That aligns with cabbageland’s bias toward transferable mechanisms over branding.",
+      "finalDecision": "Keep as adjacent inspiration. Useful representation idea, but do not overstate it into full world-model endorsement.",
+      "path": "paper_notes/vega_3d_video_generator_priors_scene_understanding.md"
+    },
+    {
+      "slug": "interact3d_compositional_3d_generation_interactive_objects",
+      "title": "Interact3D: Compositional 3D Generation of Interactive Objects",
+      "dateSurfaced": "2026-03-27",
+      "year": "2026",
+      "link": "https://arxiv.org/abs/2603.16085",
+      "venue": "arXiv",
+      "whySelected": "It makes compositional 3D generation less mushy by imposing explicit registration and collision-aware optimization.",
+      "verdict": "* Useful",
+      "verdictText": "This is not a profound representation paper, but it earns a note because it replaces “compositional 3D” marketing with actual geometric constraints. The strongest part is the two-stage registration-plus-SDF composition pipeline. The weakest part is the agentic prompt-refinement layer, which feels much more decorative and brittle.",
+      "overview": "Interact3D is a training-free pipeline for generating interactive 3D object compositions from a user-provided mesh plus a text prompt. It first renders the input object, uses image generation to create a compositional scene and a complementary-object image, reconstructs those into meshes, and then treats the scene mesh mainly as geometric guidance rather than as the final asset. Composition happens in two stages: first an anchor object is aligned by global-to-local registration, then remaining objects are placed with an SDF-based optimization that explicitly penalizes collisions. A VLM-driven refinement loop can then propose image edits when severe geometric mismatch remains. The useful point is that composition is handled as constrained geometry, not only generation.",
+      "whyItMatters": "Because it is a clean example of replacing vague compositional generation language with explicit geometry and constraints. Even if the pipeline is inelegant, the instinct is right.",
+      "finalDecision": "Keep, but mainly for the constraint-first decomposition. The geometry is the point; the agentic layer is mostly garnish.",
+      "path": "paper_notes/interact3d_compositional_3d_generation_interactive_objects.md"
+    },
+    {
+      "slug": "fast_wam_world_action_models_without_test_time_imagination",
+      "title": "Fast-WAM: Do World Action Models Need Test-time Future Imagination?",
+      "dateSurfaced": "2026-03-27",
+      "year": "2026",
+      "link": "https://arxiv.org/abs/2603.16666",
+      "venue": "arXiv",
+      "whySelected": "It directly tests whether embodied world models need expensive imagine-then-execute inference, instead of assuming that visible future generation is inherently useful.",
+      "verdict": "* Highly relevant",
+      "verdictText": "This is one of the cleaner recent embodied papers because it isolates a real confound instead of adding another branded stack. The key result is not merely speed; it is the claim that video co-training may be doing most of the representational work, while explicit future generation at inference time contributes much less than the field has implied. If that holds up, a lot of current WAM design is overpaying for inference-time theater.",
+      "overview": "Fast-WAM keeps the world-model training signal but removes explicit future imagination at test time. The model is built from a pretrained video diffusion transformer backbone plus an action expert transformer in a shared-attention mixture-of-transformers setup. During training, it jointly learns to predict future video latents and action chunks, so the visual backbone is forced to encode physically meaningful temporal structure. During inference, it discards the future-video branch and uses only a single-pass latent world representation from the current observation to generate actions directly. The paper’s central claim is that world modeling is mainly valuable as a representation-learning objective, not necessarily as a deployment-time video synthesis loop.",
+      "whyItMatters": "Because it sharpens an important design principle: world modeling can be useful without committing to expensive deployment-time generated futures. That is exactly the kind of structure-versus-theater distinction worth preserving.",
+      "finalDecision": "Preserve and cite. This is a real mechanistic paper, not just another “world model” costume change.",
+      "path": "paper_notes/fast_wam_world_action_models_without_test_time_imagination.md"
+    },
     {
       "slug": "planning_in_8_tokens_compact_discrete_tokenizer_world_model",
       "title": "Planning in 8 Tokens: A Compact Discrete Tokenizer for Latent World Model",
