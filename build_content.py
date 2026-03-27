@@ -54,7 +54,7 @@ def parse_daily(path: Path) -> dict:
     return {
         'slug': date,
         'date': date,
-        'title': f'Daily Paper Digest — {date}',
+        'title': 'Daily Digest',
         'theme': theme,
         'overview': overview,
         'takeaway': takeaway,
