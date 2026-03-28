@@ -1,7 +1,22 @@
 {
-  "generatedAt": "2026-03-27T15:04:25.864991+00:00",
+  "generatedAt": "2026-03-28T15:02:51.004018+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
+    {
+      "slug": "2026-03-28",
+      "date": "2026-03-28",
+      "title": "Daily Digest — 2026-03-28",
+      "theme": "Today’s real split is between papers that change the state representation and papers that merely decorate generation. The strongest hit replaces photometric video latents with geometry-foundation features as the predictive state. The second worthwhile hit is less about architecture than research hygiene: it argues that for large pretrained VLAs, catastrophic forgetting is not the default story many papers still assume. That matters because it changes what counts as a serious continual-learning baseline.",
+      "overview": "Today’s most relevant paper is VGGT-World: Transforming VGGT into an Autoregressive Geometry World Model. It makes the right move: stop asking a video generator to implicitly carry geometry while spending most of its capacity on appearance. Instead, use a frozen geometry foundation model as the state representation and learn temporal evolution directly in that latent space. That is a much cleaner bet than another “geometry-aware video generation” paper.\n\nThe second paper worth preserving is Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning. This is not exciting in the cinematic sense, but it is useful because it pressures a lazy assumption in robot learning: that continual adaptation necessarily demands elaborate anti-forgetting machinery. Their evidence suggests that large pretrained VLAs plus simple experience replay already behave much better than small-from-scratch baselines, especially in low-replay regimes.\n\nA third paper I inspected but am not preserving as a full note today is DreamWorld: Unified World Modeling in Video Generation. It is not empty, but it still reads like multi-source feature injection into a video generator rather than a convincing explicit world model. Useful citation material, not a paper I currently trust as a conceptual anchor.",
+      "takeaway": "The useful lesson today is that explicit structure keeps winning whenever papers actually commit to it. VGGT-World improves the situation by choosing a geometry-native latent state instead of asking RGB-oriented video latents to secretly become 3D simulators. The VLA continual-learning paper is valuable in a different way: it removes some excuse-making from the literature by showing that large pretrained controllers already retain skills better than the old catastrophic-forgetting story would suggest. DreamWorld, by contrast, still feels like a generator wearing a world-model nametag. If a paper claims world modeling, ask what the state is, how it evolves, and whether the evaluation tests that state rather than just prettier outputs.",
+      "mostRelevantPaper": "VGGT-World is the clear winner. The important idea is not just “predict depth better.” The important idea is that the predictive state should already encode geometry in a decoder-compatible form, so the temporal model can spend its capacity on state evolution rather than relearning geometry through appearance compression. That is much closer to the kind of explicit structure cabbageland should care about.",
+      "rankedTitles": [
+        "VGGT-World: Transforming VGGT into an Autoregressive Geometry World Model",
+        "Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning",
+        "DreamWorld: Unified World Modeling in Video Generation"
+      ],
+      "path": "daily_papers/2026-03-28.md"
+    },
     {
       "slug": "2026-03-27",
       "date": "2026-03-27",
@@ -125,6 +140,36 @@
     }
   ],
   "notes": [
+    {
+      "slug": "vggt_world_autoregressive_geometry_world_model",
+      "title": "VGGT-World: Transforming VGGT into an Autoregressive Geometry World Model",
+      "dateSurfaced": "2026-03-28",
+      "year": "2026",
+      "link": "https://arxiv.org/abs/2603.12655",
+      "venue": "arXiv",
+      "whySelected": "It replaces appearance-heavy video latents with frozen geometry-foundation features as the predictive state, which is exactly the kind of representational move that could matter for usable world models.",
+      "verdict": "Highly relevant",
+      "verdictText": "This is one of the cleaner recent arguments that world-model quality depends heavily on the state representation, not just on the rollout machinery. The core move is good: predict future geometry-native latents directly instead of generating RGB-ish futures and hoping geometry survives the trip. My main caution is that the evaluation is still forecasting-centric rather than control-centric, so the paper shows a better predictive state more clearly than it shows downstream planning utility.",
+      "overview": "VGGT-World takes a pretrained geometry foundation model, VGGT, and treats its intermediate geometry tokens as the world state. Instead of training a video generator to produce future frames, it trains a temporal flow transformer to autoregressively predict how those geometry tokens evolve over time. The predicted token trajectory is then decoded by the frozen VGGT decoder and heads into geometric outputs such as depth and point maps. The paper’s main claim is that this geometry-native predictive state is both more faithful and far cheaper for 3D forecasting than appearance-driven video latent models.",
+      "whyItMatters": "Because it is a strong example of choosing a better state representation instead of polishing the decoder. That is the kind of move that tends to transfer.",
+      "finalDecision": "Preserve and cite. This is one of the better recent papers in the “world model, but please specify the state” category.",
+      "path": "paper_notes/vggt_world_autoregressive_geometry_world_model.md"
+    },
+    {
+      "slug": "pretrained_vlas_resistant_to_forgetting_continual_learning",
+      "title": "Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning",
+      "dateSurfaced": "2026-03-28",
+      "year": "2026",
+      "link": "https://arxiv.org/abs/2603.03818",
+      "venue": "ICML 2026 / arXiv",
+      "whySelected": "It usefully raises the baseline bar by showing that large pretrained VLAs with simple replay already resist forgetting much better than the old small-policy story suggests.",
+      "verdict": "Useful",
+      "verdictText": "This is a baseline-sharpening paper more than an architectural one, but that still matters. If its empirical story holds, then future continual-learning and memory papers for VLAs should stop pretending that catastrophic forgetting under small from-scratch policies is the relevant default. The paper is strongest as a corrective to evaluation culture, not as a deep mechanistic theory of continual learning.",
+      "overview": "The paper studies continual learning for robotic policies in the regime that now matters more: large pretrained VLAs rather than small behavior-cloning models trained from scratch. The central claim is that pretrained VLAs are much more resistant to catastrophic forgetting than the older literature would lead you to expect, especially when paired with simple experience replay. Across LIBERO task suites, the authors report that replay buffers far smaller than those usually needed for small policies can already preserve prior skills fairly well, and sometimes even produce positive backward transfer. The practical message is that pretraining changes the continual-learning landscape enough that weak baselines are no longer acceptable.",
+      "whyItMatters": "Because it changes the baseline assumptions for any future work on VLA memory or continual learning. If simple replay on pretrained models is already strong, new methods need to beat that honestly.",
+      "finalDecision": "Preserve as a baseline-setting note. Not because the mechanism is beautiful, but because it changes what future papers should be allowed to claim.",
+      "path": "paper_notes/pretrained_vlas_resistant_to_forgetting_continual_learning.md"
+    },
     {
       "slug": "vega_3d_video_generator_priors_scene_understanding",
       "title": "VEGA-3D: Generation Models Know Space: Unleashing Implicit 3D Priors for Scene Understanding",
@@ -379,21 +424,6 @@
       "whyItMatters": "Because it is a good reminder that world-model value often lives in interface design under deployment constraints. The representation and rollout contract matter more than another pretty offline sample.",
       "finalDecision": "Worth keeping as a systems reference. Probably not a foundational paper, but it is materially more useful than another generic driving diffusion model.",
       "path": "paper_notes/vectorworld_streaming_world_model_vector_graphs.md"
-    },
-    {
-      "slug": "vggt_world_autoregressive_geometry_world_model",
-      "title": "VGGT-World: Transforming VGGT into an Autoregressive Geometry World Model",
-      "dateSurfaced": "2026-03-21",
-      "year": "2026",
-      "link": "https://arxiv.org/abs/2603.12655",
-      "venue": "arXiv",
-      "whySelected": "It is one of the clearest recent attempts to make geometry-foundation features, rather than video latents, the actual predictive state.",
-      "verdict": "Must read",
-      "verdictText": "This is one of the better recent world-model papers because it picks the right battlefield: representation. Instead of spending model capacity predicting appearance and hoping geometry survives as a side effect, it forecasts future geometry-state tokens directly. That is a much cleaner bet.",
-      "overview": "VGGT-World freezes a pretrained geometry foundation model, VGGT, and treats one of its latent token layers as the state that should be predicted over time. A temporal flow transformer is then trained to autoregressively forecast future chunks of those geometry-state tokens rather than future RGB frames. The model uses a z-prediction parameterization and a rollout curriculum to make latent forecasting more stable. Predicted tokens are decoded by the frozen geometry decoder into depth and related geometric outputs.",
-      "whyItMatters": "Because it helps draw the line between geometry-native predictive state and prettier video prediction. That distinction matters.",
-      "finalDecision": "Read. Strong framing paper with a real representational thesis.",
-      "path": "paper_notes/vggt_world_autoregressive_geometry_world_model.md"
     },
     {
       "slug": "omnivta_visuotactile_world_model_contact_rich_manipulation",
