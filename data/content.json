@@ -1,7 +1,22 @@
 {
-  "generatedAt": "2026-03-29T05:17:22.268520+00:00",
+  "generatedAt": "2026-03-29T23:10:57.095660+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
+    {
+      "slug": "2026-03-29",
+      "date": "2026-03-29",
+      "title": "Daily Digest — 2026-03-29",
+      "theme": "Today’s worthwhile papers are about memory that actually changes the control or generation contract, not memory as a decorative synonym for “more context.” The strongest hit is a robotics paper that treats perceptual aliasing as the core failure mode and builds a geometry-grounded episodic memory around it. The second useful hit is adjacent rather than central: a video world-model paper that notices static-scene memory is too easy and designs a benchmark plus retrieval mechanism for dynamic subjects that leave and re-enter view.",
+      "overview": "Today’s most relevant paper is Chameleon: Episodic Memory for Long-Horizon Robotic Manipulation. It is not just another “memory-augmented VLA” paper. Its main value is that it names a real failure case—decision-time perceptual aliasing—and tries to preserve the disambiguating evidence instead of immediately compressing everything into semantic mush. The geometry-grounded write path and goal-directed recall story are more serious than most retrieval-by-similarity baselines.\n\nThe second paper worth preserving is Out of Sight but Not Out of Mind: Hybrid Memory for Dynamic Video World Models. This is not a robotics control paper, and I would not oversell the “world model” claim. But it does isolate an honest memory problem that many consistency papers glide past: when moving subjects disappear from view, static-scene retrieval is not enough. The dataset contribution is arguably as important as the mechanism.\n\nA third paper I inspected but am not preserving as a full note today is Persistent Robot World Models: Stabilizing Multi-Step Rollouts via Reinforcement Learning. It looks competent and probably useful if you care about rollout fidelity, but the contribution is mainly post-training a video world model to make its long rollouts prettier and more stable. That matters for simulation quality, but it is weaker as a step toward explicit state, memory, or planning structure.",
+      "takeaway": "The useful lesson today is that memory should be defined by what must survive ambiguity, not by how many tokens can be carried forward. Chameleon is the strongest paper because it identifies a concrete memory demand—perceptual aliasing in manipulation—and gives it a more defensible write/retrieve/control interface built around geometry-grounded evidence and goal-directed recall. Hybrid Memory / HyDRA is looser but still worthwhile because it notices that static-scene consistency is an easier problem than keeping track of moving entities that temporarily disappear. PersistWorld, by contrast, is mostly an optimization story for rollout fidelity: useful if you need better long generated videos, but not a major conceptual step toward explicit structure.",
+      "mostRelevantPaper": "Chameleon is the clear winner. The important move is not just “add memory.” The important move is to say that some robotic decisions are non-Markov at the observation level, then build the memory interface around preserving the evidence that disambiguates those cases. That is much more useful than generic long-context rhetoric.",
+      "rankedTitles": [
+        "Chameleon: Episodic Memory for Long-Horizon Robotic Manipulation",
+        "Out of Sight but Not Out of Mind: Hybrid Memory for Dynamic Video World Models",
+        "Persistent Robot World Models: Stabilizing Multi-Step Rollouts via Reinforcement Learning"
+      ],
+      "path": "daily_papers/2026-03-29.md"
+    },
     {
       "slug": "2026-03-28",
       "date": "2026-03-28",
@@ -140,6 +155,36 @@
     }
   ],
   "notes": [
+    {
+      "slug": "hybrid_memory_dynamic_video_world_models",
+      "title": "Out of Sight but Not Out of Mind: Hybrid Memory for Dynamic Video World Models",
+      "dateSurfaced": "2026-03-29",
+      "year": "2026",
+      "link": "https://arxiv.org/abs/2603.25716",
+      "venue": "arXiv",
+      "whySelected": "It isolates a real weak spot in video-memory systems—keeping track of moving subjects that disappear from view—and pairs that with a dedicated benchmark instead of pretending static-scene consistency is enough.",
+      "verdict": "Useful",
+      "verdictText": "This is a worthwhile adjacent paper because it notices that many memory mechanisms are really optimized for static backgrounds, not dynamic entities with independent motion. The best part may be the benchmark design rather than the architecture itself. I inspected substantial accessible method text, but not every appendix and metric table, so the mechanism judgment is firmer than any exact quantitative claim.",
+      "overview": "The paper argues that video world models need a hybrid form of memory: one part must preserve static background consistency under camera motion, while another part must maintain the identity and plausible motion of dynamic subjects when they temporarily leave the field of view and later reappear. To support this claim, it builds HM-World, a synthetic Unreal-based dataset with deliberate exit-entry events, diverse scenes, subjects, camera trajectories, and annotations for subject positions and visibility intervals. On top of that, it proposes HyDRA, a retrieval mechanism that compresses memory into tokens and uses spatiotemporal relevance-driven retrieval during denoising to recover the motion and appearance cues most relevant to re-emerging subjects. The contribution is more convincing as a memory benchmark/interface paper than as a deep rethinking of world-model state.",
+      "whyItMatters": "Because it sharpens a useful scouting rule: many memory papers are really solving camera revisit consistency, not dynamic entity persistence. This paper is a good reminder to ask what exactly the memory mechanism is supposed to preserve.",
+      "finalDecision": "Worth preserving as adjacent inspiration. The benchmark pressure is the most valuable part, and the architectural ideas are useful but not yet a major step toward explicit structured world state.",
+      "path": "paper_notes/hybrid_memory_dynamic_video_world_models.md"
+    },
+    {
+      "slug": "chameleon_episodic_memory_long_horizon_robotic_manipulation",
+      "title": "Chameleon: Episodic Memory for Long-Horizon Robotic Manipulation",
+      "dateSurfaced": "2026-03-29",
+      "year": "2026",
+      "link": "https://arxiv.org/abs/2603.24576",
+      "venue": "arXiv",
+      "whySelected": "It treats perceptual aliasing as the real memory problem in manipulation and proposes a geometry-grounded episodic memory that preserves disambiguating evidence instead of compressing everything into semantic summaries.",
+      "verdict": "Highly relevant",
+      "verdictText": "This is one of the better recent robotics memory papers because it starts from a concrete failure mode rather than the usual vague claim that long-horizon tasks need “memory.” The key idea is that the same current observation can require different actions depending on hidden interaction history, so the system must store and recall the evidence that separates those cases. I inspected substantial accessible method text, but not every appendix and result table, so I trust the mechanism more than I trust any precise SOTA margin.",
+      "overview": "Chameleon is a memory architecture for robotic manipulation under perceptual aliasing, where decision-time observations are ambiguous because relevant state was previously visible and is now occluded or overwritten. It uses geometry-grounded perception from a front camera, a hand camera, and proprioception to write view-consistent patch tokens into a differentiable memory stack. That memory couples a long-range episodic state with a working state used for immediate control, and a learned internal objective called HoloHead tries to shape the memory readout so it is predictive of near-future state evolution. A memory-conditioned rectified-flow policy then generates an end-effector trajectory. The main virtue is not biological theater; it is that the paper specifies what gets written, what gets read, and why similarity-only retrieval is not enough.",
+      "whyItMatters": "Because it gives a clean way to talk about memory as preservation of disambiguating state, not just larger context windows. It is useful evidence that some robotic memory problems are really representation-and-retrieval problems under aliasing.",
+      "finalDecision": "Worth preserving and likely worth a deeper read. Even if the exact architecture is not the final answer, the paper asks the right question and specifies a much better memory contract than most of the surrounding literature.",
+      "path": "paper_notes/chameleon_episodic_memory_long_horizon_robotic_manipulation.md"
+    },
     {
       "slug": "vggt_world_autoregressive_geometry_world_model",
       "title": "VGGT-World: Transforming VGGT into an Autoregressive Geometry World Model",
@@ -544,14 +589,5 @@
       "overview": "## Current pattern",
       "path": "related_work/vla_memory_and_continual_learning.md"
     }
-  ],
-  "audio": {
-    "paper_notes/connectivity_guided_rTMS_chronic_pain.md": {
-      "label": "listen",
-      "scriptPath": "../../cabbageclaw-neuro-daily/audio_scripts/connectivity_guided_rTMS_chronic_pain_audio_script.md",
-      "audioPath": "../cabbageclaw-neuro-daily-web/audio/generated/connectivity_guided_rTMS_chronic_pain.wav",
-      "voice": "en_US-ryan-medium",
-      "rate": 0.79
-    }
-  }
+  ]
 }
