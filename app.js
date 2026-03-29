@@ -9,7 +9,7 @@ function makeClickableCard(node, href) {
   node.tabIndex = 0;
   node.setAttribute('role', 'link');
   node.addEventListener('click', (e) => {
-    if (e.target.closest('a, button, summary')) return;
+    if (e.target.closest('a, button, summary, audio')) return;
     window.open(href, '_blank', 'noreferrer');
   });
   node.addEventListener('keydown', (e) => {
@@ -18,6 +18,26 @@ function makeClickableCard(node, href) {
       e.preventDefault();
       window.open(href, '_blank', 'noreferrer');
     }
+  });
+}
+
+function audioInfoForPath(path) {
+  return state.content?.audio?.[path] || null;
+}
+
+function wireCardListenButton(node, path) {
+  const audioInfo = audioInfoForPath(path);
+  const button = node.querySelector('.listen-link');
+  if (!button || !audioInfo) return;
+  button.classList.remove('hidden');
+  button.textContent = audioInfo.label || 'listen';
+  button.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const player = node.querySelector('.inline-audio-player');
+    if (!player) return;
+    player.src = `./${audioInfo.audioPath}`;
+    player.classList.remove('hidden');
+    player.play().catch((err) => console.error('Audio playback failed', err));
   });
 }
 
@@ -173,6 +193,7 @@ function renderNotes() {
     paperLink.href = item.link || noteHref;
     const mdLink = node.querySelector('.md-link');
     mdLink.href = noteHref;
+    wireCardListenButton(node, item.path);
     makeClickableCard(node, noteHref);
     els.notesList.appendChild(node);
   }

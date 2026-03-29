@@ -389,3 +389,7 @@ details summary { cursor:pointer; color: var(--accent-2); font-size: 17px; font-
     justify-content: center;
   }
 }
+
+.hidden { display: none !important; }
+.inline-audio-player { width: 100%; margin-top: 0.75rem; }
+.reset-button { appearance: none; border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; }

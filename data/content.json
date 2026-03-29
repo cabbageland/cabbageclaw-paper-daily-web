@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-28T15:02:51.004018+00:00",
+  "generatedAt": "2026-03-29T05:17:22.268520+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
     {
@@ -544,5 +544,14 @@
       "overview": "## Current pattern",
       "path": "related_work/vla_memory_and_continual_learning.md"
     }
-  ]
+  ],
+  "audio": {
+    "paper_notes/connectivity_guided_rTMS_chronic_pain.md": {
+      "label": "listen",
+      "scriptPath": "../../cabbageclaw-neuro-daily/audio_scripts/connectivity_guided_rTMS_chronic_pain_audio_script.md",
+      "audioPath": "../cabbageclaw-neuro-daily-web/audio/generated/connectivity_guided_rTMS_chronic_pain.wav",
+      "voice": "en_US-ryan-medium",
+      "rate": 0.79
+    }
+  }
 }
