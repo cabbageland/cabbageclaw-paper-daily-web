@@ -49,6 +49,25 @@
     </section>
 
     <main>
+      <section class="view view-detail" id="view-detail">
+        <article class="panel detail-panel">
+          <div class="detail-header">
+            <div>
+              <p class="detail-kicker" id="detailKicker"></p>
+              <h2 id="detailTitle"></h2>
+              <p class="detail-meta" id="detailMeta"></p>
+            </div>
+            <div class="detail-actions">
+              <button class="button ghost source-pill" id="detailBackButton" type="button">← back</button>
+              <button class="button ghost source-pill hidden" id="detailAudioButton" type="button">listen</button>
+              <a class="button ghost source-pill" id="detailSourceLink" target="_blank" rel="noreferrer">open on GitHub</a>
+            </div>
+          </div>
+          <audio id="detailAudioPlayer" class="detail-audio hidden" controls preload="none"></audio>
+          <article class="markdown-body" id="detailBody"></article>
+        </article>
+      </section>
+
       <section class="view active" id="view-overview">
         <div class="stats" id="stats"></div>
         <div class="grid two">
@@ -95,6 +114,9 @@
         <summary>Takeaway</summary>
         <p class="takeaway"></p>
       </details>
+      <div class="link-row">
+        <button class="listen-link reset-button hidden" type="button">listen</button>
+      </div>
     </article>
   </template>
 
@@ -113,7 +135,6 @@
         <button class="listen-link reset-button hidden" type="button">listen</button>
         <a class="md-link" target="_blank" rel="noreferrer">note markdown</a>
       </div>
-      <audio class="inline-audio-player hidden" controls preload="none"></audio>
     </article>
   </template>
 
@@ -125,6 +146,7 @@
     </article>
   </template>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="./app.js" type="module"></script>
 </body>
 </html>

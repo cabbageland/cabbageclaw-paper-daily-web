@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent
 SOURCE_REPO = ROOT.parent / 'cabbageclaw_paper_daily'
 OUT_PATH = ROOT / 'data' / 'content.json'
 REPO_NAME = 'cabbageland/cabbageclaw_paper_daily'
+AUDIO_MANIFEST = SOURCE_REPO / 'audio_manifest.json'
 
 
 def read_text(path: Path) -> str:
@@ -28,6 +29,14 @@ def extract_subsection(text: str, heading: str) -> str:
     return m.group(1).strip() if m else ''
 
 
+def extract_first_section(text: str, headings: tuple[str, ...]) -> str:
+    for heading in headings:
+        section = extract_section(text, heading)
+        if section:
+            return section
+    return ''
+
+
 def first_paragraph(text: str) -> str:
     parts = [p.strip() for p in re.split(r'\n\s*\n', text.strip()) if p.strip()]
     return parts[0] if parts else ''
@@ -38,27 +47,32 @@ def clean_md(text: str) -> str:
     text = re.sub(r'`([^`]+)`', r'\1', text)
     text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
     text = re.sub(r'\*(.*?)\*', r'\1', text)
-    text = re.sub(r'^-\s+', '', text, flags=re.M)
+    text = re.sub(r'^[-*]\s+', '', text, flags=re.M)
     return text.strip()
+
+
+def normalize_verdict(text: str) -> str:
+    return re.sub(r'^\*+\s*', '', clean_md(text)).strip()
 
 
 def parse_daily(path: Path) -> dict:
     text = read_text(path)
     date = path.stem
+    title = clean_md(re.sub(r'^#\s+', '', text.splitlines()[0]).strip())
     theme = clean_md(extract_section(text, 'Theme'))
     overview = clean_md(extract_section(text, 'Short overview'))
     takeaway = clean_md(extract_section(text, 'One-paragraph takeaway'))
-    top = clean_md(extract_section(text, 'Most relevant to cabbageland'))
-    ranked = extract_section(text, 'Ranked papers')
+    top = clean_md(extract_first_section(text, ('Most relevant to cabbageland', 'Most relevant paper')))
+    ranked = extract_first_section(text, ('Ranked papers', 'Ranked list'))
     ranked_titles = re.findall(r'^\d+\. \*\*(.*?)\*\*', ranked, flags=re.M)
     return {
         'slug': date,
         'date': date,
-        'title': f'Daily Digest — {date}',
+        'title': title or f'Daily Paper Digest — {date}',
         'theme': theme,
         'overview': overview,
         'takeaway': takeaway,
-        'mostRelevantPaper': first_paragraph(top),
+        'mostRelevantPaper': top.split('\n\n', 1)[0].strip(),
         'rankedTitles': ranked_titles,
         'path': f'daily_papers/{path.name}',
     }
@@ -74,7 +88,7 @@ def parse_note(path: Path) -> dict:
 
     quick = extract_section(text, 'Quick verdict')
     verdict_lines = [ln.strip() for ln in quick.splitlines() if ln.strip()]
-    verdict = clean_md(verdict_lines[0]) if verdict_lines else ''
+    verdict = normalize_verdict(verdict_lines[0]) if verdict_lines else ''
     verdict_text = clean_md('\n'.join(verdict_lines[1:]).strip())
     overview = clean_md(extract_section(text, 'One-paragraph overview'))
     why_it_matters = clean_md(extract_subsection(text, '12. Why does this matter for cabbageland?'))
@@ -109,6 +123,26 @@ def parse_related(path: Path) -> dict:
     }
 
 
+def collect_markdown() -> dict[str, str]:
+    markdown: dict[str, str] = {}
+    for subdir in ('daily_papers', 'paper_notes', 'related_work'):
+        base = SOURCE_REPO / subdir
+        if not base.exists():
+            continue
+        for path in base.glob('*.md'):
+            if path.name == '.gitkeep':
+                continue
+            markdown[f'{subdir}/{path.name}'] = read_text(path)
+    return markdown
+
+
+def collect_audio() -> dict[str, dict[str, str]]:
+    if not AUDIO_MANIFEST.exists():
+        return {}
+    manifest = json.loads(AUDIO_MANIFEST.read_text(encoding='utf-8'))
+    return manifest.get('items', {})
+
+
 def main() -> None:
     daily_dir = SOURCE_REPO / 'daily_papers'
     notes_dir = SOURCE_REPO / 'paper_notes'
@@ -135,6 +169,8 @@ def main() -> None:
         'digests': digests,
         'notes': notes,
         'related': related,
+        'markdown': collect_markdown(),
+        'audio': collect_audio(),
     }
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')

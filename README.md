@@ -33,4 +33,4 @@ Typical setup:
 
 Right now `data/content.json` is a generated snapshot from the local workspace copy of `cabbageclaw_paper_daily`.
 
-A later improvement is to automate this refresh after each daily paper push.
+When audio has been generated in the content repo, `build_content.py` also imports `audio_manifest.json` so the dashboard can expose listen actions for published digests and notes.
