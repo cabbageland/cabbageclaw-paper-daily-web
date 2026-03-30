@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-30T15:52:25.293356+00:00",
+  "generatedAt": "2026-03-30T16:11:55.017528+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
     {
@@ -751,6 +751,13 @@
       "voice": "en_US-hfc_male-medium",
       "rate": 0.95
     },
+    "daily_papers/2026-03-30.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/2026-03-30_digest_audio_script.md",
+      "audioPath": "audio/generated/2026-03-30_digest.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
     "paper_notes/act_sense_act_active_perception_egocentric_human_data.md": {
       "label": "listen",
       "scriptPath": "audio_scripts/act_sense_act_active_perception_egocentric_human_data_audio_script.md",
@@ -790,6 +797,20 @@
       "label": "listen",
       "scriptPath": "audio_scripts/fast_wam_world_action_models_without_test_time_imagination_audio_script.md",
       "audioPath": "audio/generated/fast_wam_world_action_models_without_test_time_imagination.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
+    "paper_notes/gaussiangpt_autoregressive_3d_gaussian_scene_generation.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/gaussiangpt_autoregressive_3d_gaussian_scene_generation_audio_script.md",
+      "audioPath": "audio/generated/gaussiangpt_autoregressive_3d_gaussian_scene_generation.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
+    "paper_notes/geosr_make_geometry_matter_spatial_reasoning.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/geosr_make_geometry_matter_spatial_reasoning_audio_script.md",
+      "audioPath": "audio/generated/geosr_make_geometry_matter_spatial_reasoning.wav",
       "voice": "en_US-hfc_male-medium",
       "rate": 0.95
     },
