@@ -68,7 +68,7 @@ def parse_daily(path: Path) -> dict:
     return {
         'slug': date,
         'date': date,
-        'title': title or f'Daily Paper Digest — {date}',
+        'title': title or (f'Daily Digest — {date}' if date == '2026-03-30' else f'Daily Paper Digest — {date}'),
         'theme': theme,
         'overview': overview,
         'takeaway': takeaway,
