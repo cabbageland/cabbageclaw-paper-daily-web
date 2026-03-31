@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-31T16:22:56.329113+00:00",
+  "generatedAt": "2026-03-31T17:11:18.502549+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
     {
@@ -1119,6 +1119,27 @@
       "label": "listen",
       "scriptPath": "audio_scripts/2026-03-31_digest_audio_script.md",
       "audioPath": "audio/generated/2026-03-31_digest.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
+    "paper_notes/uni_world_vla_interleaved_driving.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/uni_world_vla_interleaved_driving_audio_script.md",
+      "audioPath": "audio/generated/uni_world_vla_interleaved_driving.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
+    "paper_notes/pijepa_policy_guided_world_model_navigation.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/pijepa_policy_guided_world_model_navigation_audio_script.md",
+      "audioPath": "audio/generated/pijepa_policy_guided_world_model_navigation.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
+    "paper_notes/maniparena_real_world_vla_evaluation.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/maniparena_real_world_vla_evaluation_audio_script.md",
+      "audioPath": "audio/generated/maniparena_real_world_vla_evaluation.wav",
       "voice": "en_US-hfc_male-medium",
       "rate": 0.95
     }
