@@ -41,6 +41,17 @@ function renderMarkdown(text = '') {
     headerIds: false,
     mangle: false
   });
+  const renderer = new marked.Renderer();
+  renderer.link = ({ href, title, tokens }) => {
+    const label = tokens?.map((t) => t.text || '').join('') || href || '';
+    if (href && (href.startsWith('../paper_notes/') || href.startsWith('../daily_papers/') || href.startsWith('../related_work/'))) {
+      const normalized = href.replace(/^\.\.\//, '');
+      const safeTitle = title ? ` title="${escapeHtml(title)}"` : '';
+      return `<a href="#" data-open-path="${escapeHtml(normalized)}"${safeTitle}>${escapeHtml(label)}</a>`;
+    }
+    return `<a href="${escapeHtml(href || '')}"${title ? ` title="${escapeHtml(title)}"` : ''} target="_blank" rel="noreferrer">${escapeHtml(label)}</a>`;
+  };
+  marked.use({ renderer });
   return marked.parse(stripLeadingMarkdownTitle(text));
 }
 
@@ -166,6 +177,12 @@ function openDetailByPath(path) {
   els.detailTitle.textContent = record.title;
   els.detailMeta.textContent = record.meta || '';
   els.detailBody.innerHTML = renderMarkdown(state.content.markdown[path]);
+  els.detailBody.querySelectorAll('[data-open-path]').forEach((node) => {
+    node.addEventListener('click', (e) => {
+      e.preventDefault();
+      openDetailByPath(node.dataset.openPath);
+    });
+  });
   els.detailSourceLink.href = githubMarkdownUrl(path);
   els.detailSourceLink.textContent = 'open on GitHub';
   configureAudioForPath(path);
