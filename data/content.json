@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-01T18:36:58.098857+00:00",
+  "generatedAt": "2026-04-01T19:41:58.866555+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
     {
@@ -1147,6 +1147,20 @@
       "label": "listen",
       "scriptPath": "audio_scripts/maniparena_real_world_vla_evaluation_audio_script.md",
       "audioPath": "audio/generated/maniparena_real_world_vla_evaluation.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
+    "paper_notes/occsim_long_horizon_occupancy_world_models.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/occsim_long_horizon_occupancy_world_models_audio_script.md",
+      "audioPath": "audio/generated/occsim_long_horizon_occupancy_world_models.wav",
+      "voice": "en_US-hfc_male-medium",
+      "rate": 0.95
+    },
+    "paper_notes/world2rules_neuro_symbolic_safety_rules_aviation.md": {
+      "label": "listen",
+      "scriptPath": "audio_scripts/world2rules_neuro_symbolic_safety_rules_aviation_audio_script.md",
+      "audioPath": "audio/generated/world2rules_neuro_symbolic_safety_rules_aviation.wav",
       "voice": "en_US-hfc_male-medium",
       "rate": 0.95
     }
