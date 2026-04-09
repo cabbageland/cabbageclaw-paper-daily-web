@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T15:11:43.321410+00:00",
+  "generatedAt": "2026-04-08T22:38:31.690221+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
     {
@@ -10,7 +10,11 @@
       "overview": "Brave search was unavailable in this run because the Brave API key is missing, so discovery fell back to direct recent arXiv inspection and RSS-style primary-source filtering. That narrows the search surface, but it is still enough for a selective pass.\n\nThe strongest paper is Action Images, because it changes the interface between video generation and control in a way that seems genuinely transferable: represent robot actions as pixel-grounded multi-view motion traces, then let the video backbone itself function as policy machinery. FunRec is the best adjacent 3D paper because it extracts articulated, simulation-ready scene structure from ordinary egocentric interaction videos rather than controlled multi-state captures. SnapFlow is the practical systems paper of the day: not a conceptual leap, but a clean and useful way to compress flow-matching VLA denoising into one step without obviously wrecking performance.\n\nI also looked at Belief Dynamics for Detecting Behavioral Shifts in Safe Collaborative Manipulation. It seems solid and safety-relevant, but for this repo pass it felt narrower than the top three and less likely to be reused as a general design reference.",
       "takeaway": "The good papers today are all trying to stop treating action and structure as afterthoughts. Action Images makes control visually explicit enough that the generative backbone can participate directly. FunRec uses interaction to recover articulated, simulation-ready scene structure instead of static pretty geometry. SnapFlow says some of the apparent cost of modern VLAs may be an optimization artifact rather than a law of nature. Different angles, same lesson: once the interface is right, the model often looks smarter without getting bigger.",
       "mostRelevantPaper": "Most relevant: Action Images.",
-      "rankedTitles": [],
+      "rankedTitles": [
+        "Action Images: End-to-End Policy Learning via Multiview Video Generation",
+        "FunRec: Reconstructing Functional 3D Scenes from Egocentric Interaction Videos",
+        "SnapFlow: One-Step Action Generation for Flow-Matching VLAs via Progressive Self-Distillation"
+      ],
       "path": "daily_papers/2026-04-08.md"
     },
     {
@@ -21,7 +25,11 @@
       "overview": "Brave search was unavailable in this run because the Brave API key is missing, so discovery fell back to direct recent arXiv inspection. That is narrower than the usual scouting surface, but still good enough for a selective pass.\n\nThe strongest hit is DeltaWorld, because it attacks a real bottleneck in generative world modeling instead of just repackaging a standard video model. The most practically useful robotics paper is Veo-Act, which treats frontier video generation as a high-level planner and openly admits the low-level control failure mode rather than pretending the video model solved manipulation. Adaptive Action Chunking is less conceptually deep than those two, but it is a clean practical mechanism that could matter for deployment and evaluation hygiene in VLA systems.\n\nI filtered out a lot of nearby papers that sounded relevant but looked mostly decorative, benchmarky, or too thinly evidenced from accessible text.",
       "takeaway": "The good papers today all cash out in explicit interfaces. DeltaWorld says future dynamics can be modeled as compact frame-to-frame semantic deltas instead of dense video tokens. Veo-Act says semantic video imagination and contact-accurate control should currently remain separate roles. AAC says even inference-time action horizon should respond to uncertainty instead of being frozen by convention. Different domains, same lesson: if a system gets better by exposing the right state and control boundaries, that is much more interesting than another blob that merely scales.",
       "mostRelevantPaper": "Most relevant: DeltaWorld.",
-      "rankedTitles": [],
+      "rankedTitles": [
+        "A Frame is Worth One Token: Efficient Generative World Modeling with Delta Tokens",
+        "Veo-Act: How Far Can Frontier Video Models Advance Generalizable Robot Manipulation?",
+        "Adaptive Action Chunking at Inference-time for Vision-Language-Action Models"
+      ],
       "path": "daily_papers/2026-04-07.md"
     },
     {

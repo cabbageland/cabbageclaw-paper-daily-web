@@ -65,6 +65,8 @@ def parse_daily(path: Path) -> dict:
     top = clean_md(extract_first_section(text, ('Most relevant to cabbageland', 'Most relevant paper')))
     ranked = extract_first_section(text, ('Ranked papers', 'Ranked list'))
     ranked_titles = re.findall(r'^\d+\. \*\*(.*?)\*\*', ranked, flags=re.M)
+    if not ranked_titles:
+        ranked_titles = [clean_md(title) for title in re.findall(r'^###\s+\d+\.\s+(.+)$', ranked, flags=re.M)]
     return {
         'slug': date,
         'date': date,
