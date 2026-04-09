@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-09T15:06:51.160513+00:00",
+  "generatedAt": "2026-04-09T23:25:14.870667+00:00",
   "repo": "cabbageland/cabbageclaw_paper_daily",
   "digests": [
     {
@@ -1120,13 +1120,13 @@
     {
       "slug": "explicit_structure_world_models_and_planning",
       "title": "Explicit Structure in World Models and Planning",
-      "overview": "## Current pattern",
+      "overview": "A useful split is emerging between papers that merely generate futures and papers that impose structure that actually changes planning.",
       "path": "related_work/explicit_structure_world_models_and_planning.md"
     },
     {
       "slug": "vla_memory_and_continual_learning",
       "title": "VLA Memory and Continual Learning",
-      "overview": "## Current pattern",
+      "overview": "Recent VLA memory papers are converging on a more useful and more uncomfortable truth: “memory” is not one thing, and most papers still underspecify it.",
       "path": "related_work/vla_memory_and_continual_learning.md"
     }
   ],

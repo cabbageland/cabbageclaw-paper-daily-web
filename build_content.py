@@ -115,8 +115,8 @@ def parse_note(path: Path) -> dict:
 def parse_related(path: Path) -> dict:
     text = read_text(path)
     title = clean_md(re.sub(r'^#\s+', '', text.splitlines()[0]).strip())
-    synthesis = clean_md(extract_section(text, 'Current synthesis'))
-    overview = first_paragraph(synthesis or clean_md('\n'.join(text.splitlines()[1:])))
+    summary = clean_md(extract_first_section(text, ('Current synthesis', 'Current pattern')))
+    overview = first_paragraph(summary or clean_md('\n'.join(text.splitlines()[1:])))
     return {
         'slug': path.stem,
         'title': title,
