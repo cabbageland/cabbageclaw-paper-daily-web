@@ -369,6 +369,17 @@ details summary { cursor:pointer; color: var(--accent-2); font-size: 17px; font-
   color: var(--accent-2);
 }
 
+.markdown-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 18px 0 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  box-shadow: 0 16px 40px rgba(0,0,0,.26);
+}
+
 .markdown-body code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.92em;
@@ -395,6 +406,48 @@ details summary { cursor:pointer; color: var(--accent-2); font-size: 17px; font-
   padding: 4px 0 4px 16px;
   border-left: 3px solid rgba(137,183,255,.45);
   color: #cfe0f3;
+}
+
+.figure-summary-section {
+  margin: 28px 0;
+  padding: 18px;
+  border: 1px solid rgba(137,183,255,.18);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(137,183,255,.06), rgba(255,255,255,.02));
+}
+
+.figure-summary-header {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 800;
+  color: #a9caff;
+  margin-bottom: 8px;
+}
+
+.figure-summary-note {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.figure-summary-card {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(7,17,27,.42);
+  margin-top: 12px;
+}
+
+.figure-summary-card h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.figure-summary-card p:last-child {
+  margin-bottom: 0;
 }
 
 @media (max-width: 880px) {

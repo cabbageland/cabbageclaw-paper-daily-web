@@ -33,6 +33,63 @@ function stripLeadingMarkdownTitle(text = '') {
   return text.replace(/^#\s+.+?(\n+|$)/, '');
 }
 
+function transformFigureSummarySections(text = '') {
+  const lines = text.split('\n');
+  const out = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (line.trim() !== '## Key figures from HTML') {
+      out.push(line);
+      continue;
+    }
+
+    const blocks = [];
+    i += 1;
+    while (i < lines.length) {
+      const heading = lines[i]?.trim() || '';
+      if (!heading) {
+        i += 1;
+        continue;
+      }
+      if (/^##\s+/.test(heading)) {
+        i -= 1;
+        break;
+      }
+      const match = heading.match(/^###\s+(.+)$/);
+      if (!match) {
+        i -= 1;
+        break;
+      }
+      const title = match[1].trim();
+      i += 1;
+      const body = [];
+      while (i < lines.length) {
+        const bodyLine = lines[i];
+        const trimmed = bodyLine.trim();
+        if (/^###\s+/.test(trimmed) || /^##\s+/.test(trimmed)) {
+          i -= 1;
+          break;
+        }
+        body.push(bodyLine);
+        i += 1;
+      }
+      blocks.push({ title, body: body.join('\n').trim() });
+    }
+
+    out.push('<section class="figure-summary-section">');
+    out.push('<div class="figure-summary-header">Key figures from HTML</div>');
+    out.push('<div class="figure-summary-note">These are HTML-extracted figure caption summaries, not embedded images.</div>');
+    for (const block of blocks) {
+      out.push('<article class="figure-summary-card">');
+      out.push(`<h3>${block.title}</h3>`);
+      if (block.body) out.push(block.body);
+      out.push('</article>');
+    }
+    out.push('</section>');
+  }
+  return out.join('\n');
+}
+
 function renderMarkdown(text = '') {
   const marked = getMarked();
   marked.setOptions({
@@ -52,7 +109,7 @@ function renderMarkdown(text = '') {
     return `<a href="${escapeHtml(href || '')}"${title ? ` title="${escapeHtml(title)}"` : ''} target="_blank" rel="noreferrer">${escapeHtml(label)}</a>`;
   };
   marked.use({ renderer });
-  return marked.parse(stripLeadingMarkdownTitle(text));
+  return marked.parse(transformFigureSummarySections(stripLeadingMarkdownTitle(text)));
 }
 
 function makeClickableCard(node, path) {
