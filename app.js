@@ -8,6 +8,18 @@ function escapeHtml(s = '') {
   return s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+function currentDetailHashPath() {
+  const hash = window.location.hash || '';
+  if (!hash.startsWith('#/')) return '';
+  return decodeURI(hash.slice(2));
+}
+
+function setDetailHashPath(path = '') {
+  const nextHash = path ? `#/${encodeURI(path)}` : '';
+  const cleanUrl = `${window.location.pathname}${window.location.search}${nextHash}`;
+  window.history.replaceState(null, '', cleanUrl);
+}
+
 function short(text = '', len = 220) {
   return text.length > len ? `${text.slice(0, len).trim()}…` : text;
 }
@@ -244,6 +256,7 @@ function openDetailByPath(path) {
   els.detailSourceLink.textContent = 'open on GitHub';
   configureAudioForPath(path);
   setActiveView('detail');
+  setDetailHashPath(path);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -427,6 +440,9 @@ function setupTabs() {
   document.querySelectorAll('.tab').forEach((btn) => {
     btn.addEventListener('click', () => {
       setActiveView(btn.dataset.view);
+      if (btn.dataset.view !== 'detail') {
+        setDetailHashPath('');
+      }
     });
   });
 }
@@ -435,6 +451,7 @@ async function init() {
   setupTabs();
   els.detailBackButton.addEventListener('click', () => {
     setActiveView(state.previousView || 'overview');
+    setDetailHashPath('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   els.searchInput.addEventListener('input', (e) => {
@@ -456,6 +473,20 @@ async function init() {
   const res = await fetch('./data/content.json');
   state.content = await res.json();
   renderAll();
+  const initialPath = currentDetailHashPath();
+  if (initialPath && state.content?.markdown?.[initialPath]) {
+    openDetailByPath(initialPath);
+  }
+  window.addEventListener('hashchange', () => {
+    const path = currentDetailHashPath();
+    if (path && state.content?.markdown?.[path]) {
+      openDetailByPath(path);
+      return;
+    }
+    if (!path && state.view === 'detail') {
+      setActiveView(state.previousView || 'overview');
+    }
+  });
 }
 
 init().catch((err) => {
