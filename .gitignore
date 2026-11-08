@@ -1,2 +1,4 @@
 Thumbs.db
 .DS_Store
+# Subscriber lists are private local data, never website assets.
+recipients*.csv
